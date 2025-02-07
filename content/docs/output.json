@@ -1,0 +1,1064 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "devRant",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://devrant.com/api/"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "sec0": {
+                "_id": "5ee1fd29a3afc6001fe4eb98",
+                "type": "apiKey",
+                "in": "query",
+                "name": "token_key"
+            },
+            "sec1": {
+                "_id": "5ee1fd29a3afc6001fe4eb97",
+                "type": "apiKey",
+                "in": "query",
+                "name": "token_id"
+            },
+            "sec2": {
+                "_id": "5ee1ffcb7a923d0012016fe2",
+                "type": "apiKey",
+                "in": "query",
+                "name": "user_id",
+                "x-default": ""
+            }
+        },
+        "schemas": []
+    },
+    "security": [
+        {
+            "sec0": [],
+            "sec1": [],
+            "sec2": []
+        }
+    ],
+    "paths": {
+        "/devrant/supporters": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/supporters",
+                "description": "Get a list of all devRant++ Members.",
+                "operationId": "devrant-supporters",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/get-user-id": {
+            "get": {
+                "tags": [],
+                "summary": "/get-user-id",
+                "description": "Get the ID of a user.\nThe UserID is used by other endpoints, so it's widely needed!",
+                "operationId": "get-user-id",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "Username of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/users/userID": {
+            "get": {
+                "tags": [],
+                "summary": "/users/<userID>",
+                "description": "Get the profile of a user.\nReplace <userID> with the user's ID.",
+                "operationId": "users-userID",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "How many rants to skip",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "content",
+                        "in": "query",
+                        "description": "What content to load.\nEither 'all', 'rants', 'upvoted', 'comments', 'viewed', 'favorites' or 'collabs'",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/rants/rantID": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/rants/<rantID>",
+                "description": "Get a single rant by ID.\nReplace <rantID> with the rant's ID.\nThe rant ID can also be an collab ID! It uses the same enpoint.",
+                "operationId": "devrant-rants-rantID",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [],
+                "summary": "/devrant/rants/<rantID>",
+                "description": "Delete a rant",
+                "operationId": "delete-devrant-rants-rantID",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "token_id",
+                        "in": "query",
+                        "description": "ID of the user token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_key",
+                        "in": "query",
+                        "description": "Token key belonging to the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID of the user, on whose behalf you are acting",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/search": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/search",
+                "description": "Search for rants.",
+                "operationId": "devrant-search",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "term",
+                        "in": "query",
+                        "description": "The search term",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/search/tags": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/search/tags",
+                "description": "Get a list of frequent used search terms.",
+                "operationId": "devrant-search-tags",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/rants": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/rants",
+                "description": "Get a list of rants. (Rant feed)",
+                "operationId": "devrant-rants",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort rants by 'algo', 'top' or 'recent'",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "range",
+                        "in": "query",
+                        "description": "In what time spectrum the rants should be. Either 'day', 'week', 'month' or 'all'",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the amount of rants to load",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "How many rants to skip",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_id",
+                        "in": "query",
+                        "description": "Token ID of the user",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_key",
+                        "in": "query",
+                        "description": "Token key belonging to the user",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID of the user on whose behalf the action is done",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            },
+            "post": {
+                "tags": [],
+                "summary": "/devrant/rants",
+                "description": "Post a rant",
+                "operationId": "post-devrant-rants",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "body",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "rant",
+                        "in": "body",
+                        "description": "Text in the rant",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "body",
+                        "description": "Type of rant\n1=rant\n2=undefined\n3=joke/meme\n4=question\n5=devRant\n6=random",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "tags",
+                        "in": "body",
+                        "description": "Tags (comma separated)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_id",
+                        "in": "body",
+                        "description": "ID of the user token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_key",
+                        "in": "body",
+                        "description": "Token key belonging to the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "body",
+                        "description": "ID of the user, on whose behalf you are acting",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/weekly-list": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/weekly-list",
+                "description": "Get a list of weekly rant topics.",
+                "operationId": "devrant-weekly-list",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/rants/surprise": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/rants/surprise",
+                "description": "Get a random rant.",
+                "operationId": "devrant-rants-surprise",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/collabs": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/collabs",
+                "description": "Get a list of collabs.",
+                "operationId": "devrant-collabs",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort collabs by 'algo', 'top' or 'recent'. (Currently not affecting anything)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the amount of collabs to load",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "How many collabs to skip",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/story-rants": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/story-rants",
+                "description": "Get a list of story-rants (Long rants).",
+                "operationId": "devrant-story-rants",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort rants by 'algo', 'top' or 'recent'",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "range",
+                        "in": "query",
+                        "description": "In what time spectrum the story-rants should be. Either 'day', 'week', 'month' or 'all'",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the amount of story-rants to load",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "How many story-rants to skip",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/weekly-rants": {
+            "get": {
+                "tags": [],
+                "summary": "/devrant/weekly-rants",
+                "description": "Get a list of weekly-rants.",
+                "operationId": "devrant-weekly-rants",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "week",
+                        "in": "query",
+                        "description": "The weekly-rant week",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort weekly-rants by 'algo', 'top' or 'recent'",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the amount of weekly-rants to load",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "How many weekly-rants to skip",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/users/auth-token/": {
+            "post": {
+                "tags": [],
+                "summary": "/users/auth-token/",
+                "description": "Get user authentication tokens",
+                "operationId": "users-auth-token",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "body",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "username",
+                        "in": "body",
+                        "description": "Username to login with",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "Password to login with",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/users/me/notif-feed": {
+            "get": {
+                "tags": [],
+                "summary": "/users/me/notif-feed",
+                "description": "Get user notifications\nNote: it won't work if some other source is checking for notifications",
+                "operationId": "users-me-notif-feed",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "token_id",
+                        "in": "query",
+                        "description": "ID of the user token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_key",
+                        "in": "query",
+                        "description": "Token key belonging to the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID of the user, on whose behalf you are acting",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/rants/rantID/comments": {
+            "post": {
+                "tags": [],
+                "summary": "/devrant/rants/<rantID>/comments",
+                "description": "Post a rant",
+                "operationId": "devrant-rants-rantID-comments",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "body",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "comment",
+                        "in": "body",
+                        "description": "Text in the comment",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_id",
+                        "in": "body",
+                        "description": "ID of the user token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_key",
+                        "in": "body",
+                        "description": "Token key belonging to the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "body",
+                        "description": "ID of the user, on whose behalf you are acting",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/rants/rantID/vote": {
+            "post": {
+                "tags": [],
+                "summary": "/devrant/rants/<rantID>/vote",
+                "description": "Vote on a rant",
+                "operationId": "devrant-rants-rantID-vote",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "body",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "vote",
+                        "in": "body",
+                        "description": "Vote state (1, 0, -1)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "reason",
+                        "in": "body",
+                        "description": "Reason for downvote\n0 - not for me\n1 - repost\n2 - offensive/spam",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_id",
+                        "in": "body",
+                        "description": "ID of the user token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_key",
+                        "in": "body",
+                        "description": "Token key belonging to the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "body",
+                        "description": "ID of the user, on whose behalf you are acting",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        },
+        "/devrant/comments/commentID": {
+            "delete": {
+                "tags": [],
+                "summary": "/devrant/comments/<commentID>",
+                "description": "Delete a comment",
+                "operationId": "devrant-comments-commentID",
+                "parameters": [
+                    {
+                        "name": "app",
+                        "in": "query",
+                        "description": "Standard app parameter. Just set it to 3",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 3
+                        }
+                    },
+                    {
+                        "name": "token_id",
+                        "in": "query",
+                        "description": "ID of the user token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "token_key",
+                        "in": "query",
+                        "description": "Token key belonging to the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID of the user, on whose behalf you are acting",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "deprecated": false,
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Null response"
+                    }
+                }
+            }
+        }
+    },
+    "x-headers": [],
+    "x-explorer-enabled": true,
+    "x-proxy-enabled": true,
+    "x-samples-enabled": true,
+    "x-samples-languages": [
+        "curl",
+        "node",
+        "ruby",
+        "javascript",
+        "python"
+    ]
+}

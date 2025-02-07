@@ -177,12 +177,14 @@
 			"          // Rants ...",
 			"        ],",
 			"        \"upvoted\": [",
-			"          // Upvoted Rants ...",
+			"          // Upvoted Rants...",
 			"        ],",
 			"        \"comments\": [",
-			"          // Comments ...",
+			"          // Comments...",
 			"        ],",
-			"        \"favorites\": []",
+			"        \"favorites\": [",
+			"          // Favorited Rants...",
+			"        ]",
 			"      },",
 			"      \"counts\": {",
 			"        \"rants\": 12,",
@@ -457,6 +459,18 @@
 			{
 				"name": "skip",
 				"description": "How many rants to skip."
+			},
+			{
+				"name": "token_id (optional)",
+				"description": "Token ID of the user"
+			},
+			{
+				"name": "token_key (optional)",
+				"description": "Token key belonging to the user"
+			},
+			{
+				"name": "user_id (optional)",
+				"description": "ID of the user on whose behalf the action is done"
 			}
 		],
 		"exampleCode": [
@@ -506,7 +520,7 @@
 			"      \"tags\": [",
 			"        \"some-tag\"",
 			"      ],",
-			"      \"vote_state\": 0,   // As far as I know: 1=upvoted, -1=downvoted, 0=unvoted, -2=no vote",
+			"      \"vote_state\": 0,   // 1=upvoted, -1=downvoted, 0=unvoted, -2=no vote",
 			"      \"edited\": false,",
 			"      \"rt\": 1,   // No clue what this is",
 			"      \"rc\": 1,   // No clue what this is",
@@ -524,9 +538,10 @@
 			"      \"user_dpp\": 1    // Bool indicator if the user is a devRant++ Member or not",
 			"    }",
 			"  ],",
-			"  \"settings\": [],   // Not sure what this contains",
-			"  \"set\": \"5a7df097a5dfa\",   // No clue what this is",
+			"  \"settings\": [],   // Contatins amount of notifications when all optional value are provided",
+			"  \"set\": \"5a7df097a5dfa\",   // Session hash",
 			"  \"wrw\": 90,   // Weekly-Rant Week",
+			"  \"dpp\": 0, // Only has value if all optional fields are provided. tells if user is dpp or not for filters etc...", 
 			"  \"news\": {",
 			"    \"id\": 123,",
 			"    \"type\": \"intlink\",    // Not sure (Maybe if it's an announcement rant or the weekly rant topic)",
@@ -534,7 +549,7 @@
 			"    \"body\": \"Worst interview rejection?\",",
 			"    \"footer\": \"Add tag 'wk90' to your rant\",",
 			"    \"height\": 100,",
-			"    \"action\": \"grouprant\"     // Not sure (What to do when clicked)",
+			"    \"action\": \"grouprant\"     // What to do when clicked",
 			"  }",
 			"}"
 		]
@@ -692,7 +707,7 @@
 			},
 			{
 				"name": "sort",
-				"description": "Sort collabs by 'algo', 'top' or 'recent'. (Currently not affecting anything, I think)"
+				"description": "Sort collabs by 'algo', 'top' or 'recent'. (Currently not affecting anything)"
 			},
 			{
 				"name": "limit",
@@ -974,6 +989,531 @@
 			"    \"action\": \"none\"     // Not sure (What to do when clicked)",
 			"  }",
 			"}"
+		]
+	},
+
+
+	{
+		"method": "POST",
+		"endpoint": "/users/auth-token/",
+		"description": "Get user authentication tokens",
+		"parameters": [
+			{
+				"name": "app",
+				"description": "Standard app parameter. Just set it to 3."
+			},
+			{
+				"name": "username",
+				"description": "Username to login with"
+			},
+			{
+				"name": "password",
+				"description": "Password to login with"
+			}
+		],
+		"exampleCode": [
+			{
+				"name": "curl",
+				"langCode": "shell",
+				"code": [
+					"$ curl --location --request POST 'https://devrant.com/api/users/auth-token' \\",
+					"--header 'Content-Type: application/x-www-form-urlencoded' \\",
+					"--data-urlencode 'app=3' \\",
+					"--data-urlencode 'username=username' \\",
+					"--data-urlencode 'password=password'"
+				]
+			},
+			{
+				"name": "PHP",
+				"langCode": "php",
+				"code": [
+					"<?php",
+					"$url = 'https://devrant.com/api/users/auth-token';",
+					"$data = array('app' => '3', 'username' => 'username', 'password' => 'password');",
+					"",
+					"$options = array(",
+					"    'http' => array(",
+					"        'header'  => \"Content-type: application/x-www-form-urlencoded\"",
+					"        'method'  => 'POST',",
+					"        'content' => http_build_query($data)",
+					"    )",
+					");",
+					"$context  = stream_context_create($options);",
+					"$result = file_get_contents($url, false, $context);",
+					"if ($result === FALSE) { /* Handle error */ }",
+					"",
+					"var_dump($result);",
+					"echo $result;",
+					"?>"
+				]
+			}
+		],
+		"exampleResponse": [
+			"{",
+			"    \"success\": true,",
+			"    \"auth_token\": {",
+			"        \"id\": 6712386, //Keep super secure",
+			"        \"key\": \"tD5qeCHb6qvvfU4dLpFEWPL7YDNjA4hz7caGLW7M\", //Keep super secure",
+			"        \"expire_time\": 6712386,",
+			"        \"user_id\": 1085040,",
+			"    }",
+			"}"
+		]
+	},
+
+
+	{
+		"method": "GET",
+		"endpoint": "/users/me/notif-feed",
+		"description": "Get user notifications\nNote: it won't work if some other source is checking for notifications",
+		"parameters": [
+			{
+				"name": "app",
+				"description": "Standard app parameter. Just set it to 3."
+			},
+			{
+				"name": "token_id",
+				"description": "ID of the user token"
+			},
+			{
+				"name": "token_key",
+				"description": "Token key belonging to the user"
+			},
+			{
+				"name": "user_id",
+				"description": "ID of the user, on whose behalf you are acting"
+			}
+		],
+		"exampleCode": [
+			{
+				"name": "curl",
+				"langCode": "shell",
+				"code": [
+					"$ curl -X GET 'https://devrant.com/api/users/me/notif-feed?app=3&token_id=<tokenID>&token_key=<tokenKey>&user_id=<userID>'"
+				]
+			},
+			{
+				"name": "PHP",
+				"langCode": "php",
+				"code": [
+					"<?php",
+					"",
+					"// Parameters",
+					"$t_id = <tokenID>;",
+					"$t_key = <tokenKey>;",
+					"$u_id = <userID>;",
+					"",
+					"// Do request",
+					"$response = file_get_contents(\"https://devrant.com/api/users/me/notif-feed?app=3&token_id=\" . $t_id . \"&token_key=\" . $t_key . \"&user_id=\" . $u_id);",
+					"",
+					"echo $response;",
+					"",
+					"?>"
+				]
+			}
+		],
+		"exampleResponse": [
+			"{",
+			"  \"success\": true",
+			"  \"data\": {",
+			"    \"items\": [",
+			"      {",
+			"         \"created_time\":1591546309,",
+			"         \"type\":\"content_vote\",  //Type of ++ (form x_y where x is content/comment and y is vote/discuss)",
+			"         \"read\":0, //0 = unread, 1 = read",
+			"         \"rant_id\":2619313,",
+			"         \"uid\":2451362,",
+			"      },",
+			"      //There is going to be 100 total",
+			"    ]",
+			"    \"check_time\":1591546309",
+			"    \"username_map\": {",
+			"      \"2451362\":'\"frogstair\", // \"notif id\": \"username\"",
+			"      \"...\":\"...\"",
+			"    },",
+			"    \"unread\": {",
+			"      \"all\": 1,",
+			"      \"upvotes\": 1,",
+			"      \"mentions\": 0,",
+			"      \"comments\": 0,",
+			"      \"subs\": 0,",
+			"      \"total\": 1",
+			"    }",
+			"  }",
+			"}"
+		]
+	},
+
+
+	{
+		"method": "POST",
+		"endpoint": " /devrant/rants",
+		"description": "Post a rant",
+		"parameters": [
+			{
+				"name": "app",
+				"description": "Standard app parameter. Just set it to 3."
+			},
+			{
+				"name": "rant",
+				"description": "Text in the rant"
+			},
+			{
+				"name": "type",
+				"description": "Type of rant\n1=rant\n2=undefined\n3=joke/meme\n4=question\n5=devRant\n6=random"
+			},
+			{
+				"name": "tags",
+				"description": "Tags (comma separated)"
+			},
+			{
+				"name": "token_id",
+				"description": "ID of the user token"
+			},
+			{
+				"name": "token_key",
+				"description": "Token key belonging to the user"
+			},
+			{
+				"name": "user_id",
+				"description": "ID of the user, on whose behalf you are acting"
+			}
+		],
+		"exampleCode": [
+			{
+				"name": "curl",
+				"langCode": "shell",
+				"code": [
+					"$ curl --location --request POST 'https://devrant.com/api/devrant/rants' \\",
+					"--header 'Content-Type: application/x-www-form-urlencoded' \\",
+					"--data-urlencode 'app=3' \\",
+					"--data-urlencode 'rant=Bla bla bla I hate everything' \\",
+					"--data-urlencode 'tags=separate, with, commas, idiot' \\",
+					"--data-urlencode 'token_id=<tokenID>' \\",
+					"--data-urlencode 'token_key=<tokenKey>' \\",
+					"--data-urlencode 'user_id=<userID>' \\"
+				]
+			},
+			{
+				"name": "PHP",
+				"langCode": "php",
+				"code": [
+					"<?php",
+					"$url = 'https://devrant.com/api/users/auth-token';",
+					"$data = array(",
+					"    'app' => '3',", 
+					"    'rant' => 'Bla bla bla I hate everything'," ,
+					"    'tags' => 'separate, with, commas, idiot'",
+					"    'token_id' => '<tokenID>'",
+					"    'token_key' => '<tokenKey>'",
+					");",
+					"",
+					"$options = array(",
+					"    'http' => array(",
+					"        'header'  => \"Content-type: application/x-www-form-urlencoded\"",
+					"        'method'  => 'POST',",
+					"        'content' => http_build_query($data)",
+					"    )",
+					");",
+					"$context  = stream_context_create($options);",
+					"$result = file_get_contents($url, false, $context);",
+					"if ($result === FALSE) { /* Handle error */ }",
+					"",
+					"var_dump($result);",
+					"echo $result;",
+					"?>"
+				]
+			}
+		],
+		"exampleResponse": [
+			"{",
+			"  \"success\": true,",
+			"  \"rant_id\": 2619313",
+			"}"			
+		]
+	},
+
+
+	{
+		"method": "POST",
+		"endpoint": "/devrant/rants/<rantID>/comments",
+		"description": "Post a rant",
+		"parameters": [
+			{
+				"name": "app",
+				"description": "Standard app parameter. Just set it to 3."
+			},
+			{
+				"name": "comment",
+				"description": "Text in the comment"
+			},
+			{
+				"name": "token_id",
+				"description": "ID of the user token"
+			},
+			{
+				"name": "token_key",
+				"description": "Token key belonging to the user"
+			},
+			{
+				"name": "user_id",
+				"description": "ID of the user, on whose behalf you are acting"
+			}
+		],
+		"exampleCode": [
+			{
+				"name": "curl",
+				"langCode": "shell",
+				"code": [
+					"$ curl --location --request POST 'https://devrant.com/api/devrant/rants/<rantID>/comments' \\",
+					"--header 'Content-Type: application/x-www-form-urlencoded' \\",
+					"--data-urlencode 'app=3' \\",
+					"--data-urlencode 'comment=I hate PHP!' \\",
+					"--data-urlencode 'token_id=<tokenID>' \\",
+					"--data-urlencode 'token_key=<tokenKey>' \\",
+					"--data-urlencode 'user_id=<userID>' \\"
+				]
+			},
+			{
+				"name": "PHP",
+				"langCode": "php",
+				"code": [
+					"<?php",
+					"$url = 'https://devrant.com/api/devrant/rants/<rantID>/comments';",
+					"$data = array(",
+					"    'app' => '3',", 
+					"    'comment' => 'I hate PHP!'," ,
+					"    'token_id' => '<tokenID>'",
+					"    'token_key' => '<tokenKey>'",
+					"    'user_id' => '<userID>'",
+					");",
+					"",
+					"$options = array(",
+					"    'http' => array(",
+					"        'header'  => \"Content-type: application/x-www-form-urlencoded\r\n\"",
+					"        'method'  => 'POST',",
+					"        'content' => http_build_query($data)",
+					"    )",
+					");",
+					"$context  = stream_context_create($options);",
+					"$result = file_get_contents($url, false, $context);",
+					"if ($result === FALSE) { /* Handle error */ }",
+					"",
+					"var_dump($result);",
+					"echo $result;",
+					"?>"
+				]
+			}
+		],
+		"exampleResponse": [
+			"{",
+			"  \"success\": true,",
+			"  \"rant_id\": 2619313",
+			"}"			
+		]
+	},
+
+
+	{
+		"method": "POST",
+		"endpoint": "/devrant/rants/<rantID>/vote",
+		"description": "Vote on a rant",
+		"parameters": [
+			{
+				"name": "app",
+				"description": "Standard app parameter. Just set it to 3."
+			},
+			{
+				"name": "vote",
+				"description": "Vote state (1, 0, -1)"
+			},
+			{
+				"name": "reason (optional)",
+				"description": "Reason for downvote\n0 - not for me\n1 - repost\n2 - offensive/spam"
+			},
+			{
+				"name": "token_id",
+				"description": "ID of the user token"
+			},
+			{
+				"name": "token_key",
+				"description": "Token key belonging to the user"
+			},
+			{
+				"name": "user_id",
+				"description": "ID of the user, on whose behalf you are acting"
+			}
+		],
+		"exampleCode": [
+			{
+				"name": "curl",
+				"langCode": "shell",
+				"code": [
+					"$ curl --location --request POST 'https://devrant.com/api/devrant/rants/2619313/vote' \\",
+					"--header 'Content-Type: application/x-www-form-urlencoded' \\",
+					"--data-urlencode 'app=3' \\",
+					"--data-urlencode 'vote=1' \\",
+					"--data-urlencode 'token_id=<tokenID>' \\",
+					"--data-urlencode 'token_key=<tokenKey>' \\",
+					"--data-urlencode 'user_id=<userID>' \\"
+				]
+			},
+			{
+				"name": "PHP",
+				"langCode": "php",
+				"code": [
+					"<?php",
+					"$url = 'https://devrant.com/api/devrant/rants/2619313/vote';",
+					"$data = array(",
+					"    'app' => '3',", 
+					"    'vote' => '1'," ,
+					"    'token_id' => '<tokenID>'",
+					"    'token_key' => '<tokenKey>'",
+					"    'user_id' => '<userID>'",
+					");",
+					"",
+					"$options = array(",
+					"    'http' => array(",
+					"        'header'  => \"Content-type: application/x-www-form-urlencoded\r\n\"",
+					"        'method'  => 'POST',",
+					"        'content' => http_build_query($data)",
+					"    )",
+					");",
+					"$context  = stream_context_create($options);",
+					"$result = file_get_contents($url, false, $context);",
+					"if ($result === FALSE) { /* Handle error */ }",
+					"",
+					"var_dump($result);",
+					"echo $result;",
+					"?>"
+				]
+			}
+		],
+		"exampleResponse": [
+			"{",
+			"  \"success\": true",
+			"  ... // Rant that you have voted on",
+			"}"			
+		]
+	},
+
+
+	{
+		"method": "DELETE",
+		"endpoint": "  /devrant/rants/<rantID>",
+		"description": "Delete a rant",
+		"parameters": [
+			{
+				"name": "app",
+				"description": "Standard app parameter. Just set it to 3."
+			},
+			{
+				"name": "token_id",
+				"description": "ID of the user token"
+			},
+			{
+				"name": "token_key",
+				"description": "Token key belonging to the user"
+			},
+			{
+				"name": "user_id",
+				"description": "ID of the user, on whose behalf you are acting"
+			}
+		],
+		"exampleCode": [
+			{
+				"name": "curl",
+				"langCode": "shell",
+				"code": [
+					"$ curl -X DELETE 'https://devrant.com/api/devrant/rants/<rantID>?app=3&token_id=<tokenID>&token_key=<tokenKey>&user_id=<userID>'"
+				]
+			},
+			{
+				"name": "PHP",
+				"langCode": "php",
+				"code": [
+					"<?php",
+					"$t_id = '<tokenID>'",
+					"$t_key = '<tokenKey>'",
+					"$u_id = '<userID>'",
+					"$client = new http\\Client;",
+					"$request = new http\\Client\\Request;",
+					"",
+					"$request->setRequestUrl('https://devrant.com/api/devrant/rants/2626238?app=3&token_id='.$t_id.'&token_key='.$t_key.'&user_id='.$u_id);",
+					"$request->setRequestMethod('DELETE');",
+					"$request->setOptions(array());,",
+					"",
+					"$client->enqueue($request)->send();",
+					"$response = $client->getResponse();",
+					"echo $response->getBody();",
+					"?>"
+				]
+			}
+		],
+		"exampleResponse": [
+			"{",
+			"  \"success\": true",
+			"}"			
+		]
+	},
+
+
+	{
+		"method": "DELETE",
+		"endpoint": "/devrant/comments/<commentID>",
+		"description": "Delete a comment",
+		"parameters": [
+			{
+				"name": "app",
+				"description": "Standard app parameter. Just set it to 3."
+			},
+			{
+				"name": "token_id",
+				"description": "ID of the user token"
+			},
+			{
+				"name": "token_key",
+				"description": "Token key belonging to the user"
+			},
+			{
+				"name": "user_id",
+				"description": "ID of the user, on whose behalf you are acting"
+			}
+		],
+		"exampleCode": [
+			{
+				"name": "curl",
+				"langCode": "shell",
+				"code": [
+					"$ curl -X DELETE 'https://devrant.com/api/devrant/comments/<commentID>?app=3&token_id=<tokenID>&token_key=<tokenKey>&user_id=<userID>'"
+				]
+			},
+			{
+				"name": "PHP",
+				"langCode": "php",
+				"code": [
+					"<?php",
+					"$t_id = '<tokenID>'",
+					"$t_key = '<tokenKey>'",
+					"$u_id = '<userID>'",
+					"$client = new http\\Client;",
+					"$request = new http\\Client\\Request;",
+					"",
+					"$request->setRequestUrl('https://devrant.com/api/devrant/comments/<commentID>?app=3&token_id='.$t_id.'&token_key='.$t_key.'&user_id='.$u_id);",
+					"$request->setRequestMethod('DELETE');",
+					"$request->setOptions(array());,",
+					"",
+					"$client->enqueue($request)->send();",
+					"$response = $client->getResponse();",
+					"echo $response->getBody();",
+					"?>"
+				]
+			}
+		],
+		"exampleResponse": [
+			"{",
+			"  \"success\": true",
+			"}"			
 		]
 	}
 ]

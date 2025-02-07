@@ -1,0 +1,67 @@
+{
+    "openapi":"3.0.0",
+    "info":{
+        "title":"devRant",
+        "version":"1.0"
+    },
+    "servers":[
+        {
+            "url":"https://devrant.com/api/"
+        }
+    ],
+    "components":{
+        "securitySchemes":{
+            "sec0":{
+                "_id":"5ee1fd29a3afc6001fe4eb98",
+                "type":"apiKey",
+                "in":"query",
+                "name":"token_key"
+            },
+            "sec1":{
+                "_id":"5ee1fd29a3afc6001fe4eb97",
+                "type":"apiKey",
+                "in":"query",
+                "name":"token_id"
+            },
+            "sec2":{
+                "_id":"5ee1ffcb7a923d0012016fe2",
+                "type":"apiKey",
+                "in":"query",
+                "name":"user_id",
+                "x-default":""
+            }
+        },
+        "schemas":{
+
+        }
+    },
+    "security":[
+        {
+            "sec0":[
+
+            ],
+            "sec1":[
+
+            ],
+            "sec2":[
+
+            ]
+        }
+    ],
+    "paths":{
+        
+    },
+    "x-headers":[
+
+    ],
+    "x-explorer-enabled":true,
+    "x-proxy-enabled":true,
+    "x-samples-enabled":true,
+    "x-samples-languages":[
+        "curl",
+        "node",
+        "ruby",
+        "javascript",
+        "python"
+    ]
+}
