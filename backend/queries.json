@@ -1,0 +1,38 @@
+{
+	"qa": {
+		"getUser": "SELECT * FROM dd_users WHERE id={id}",
+
+		"getQuestion": "SELECT * FROM dd_questions WHERE id={id}",
+
+		"getAnswer": "SELECT * FROM dd_answers WHERE id={id}",
+		"getAnswers": "SELECT * FROM dd_answers WHERE questionid={questionid}",
+		"getAnswerCount": "SELECT COUNT(*) FROM dd_answers WHERE questionid={questionid}",
+
+		"getAllQuestions": "SELECT * FROM dd_questions",
+		"getAllQuestionsBySearch": "SELECT * FROM dd_questions WHERE MATCH (title, body) AGAINST ('{search}' IN BOOLEAN MODE)",
+
+		"create": {
+			"question": "INSERT INTO dd_questions (userid, title, body, category, date) VALUES ({userid}, '{title}', '{body}', '{category}', UNIX_TIMESTAMP())",
+			"answer": "INSERT INTO dd_answers (questionid, userid, body, date) VALUES ({questionid}, {userid}, '{body}', UNIX_TIMESTAMP())"
+		},
+
+		"delete": {
+			"question": "DELETE FROM dd_questions WHERE id={id}",
+			"answer": "DELETE FROM dd_answers WHERE id={id}",
+			"answersOfQuestion": "DELETE FROM dd_answers WHERE questionid={questionid}"
+		}
+	},
+
+
+
+	"auth": {
+		"getUser": "SELECT * FROM dd_users WHERE username='{username}'",
+		"getUserByID": "SELECT * FROM dd_users WHERE id={id}",
+		"getToken": "SELECT * FROM dd_tokens WHERE token_id={id}",
+
+		"create": {
+			"user": "INSERT INTO dd_users (username, password) VALUES ('{username}', '{passwordHash}')",
+			"token": "INSERT INTO dd_tokens (token_id, token_key, userid) VALUES ('{id}', '{key}', '{userid}')"
+		}
+	}
+}
